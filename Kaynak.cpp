@@ -6,6 +6,10 @@ CPU cpu;
 Renderer renderer;
 bool running = false;
 
+bool isInside(int x, int y, int boxX, int boxY, int boxW, int boxH) {
+    return x >= boxX && x <= boxX + boxW && y >= boxY && y <= boxY + boxH;
+}
+
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_CREATE:
@@ -16,6 +20,33 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         renderer.updateAnimation(running);
         InvalidateRect(hwnd, NULL, FALSE);
         return 0;
+
+    case WM_ERASEBKGND:
+        return 1;
+
+    case WM_LBUTTONDOWN: {
+        int mouseX = LOWORD(lParam);
+        int mouseY = HIWORD(lParam);
+
+        if (isInside(mouseX, mouseY, 930, 755, 75, 35)) {
+            running = !running;
+        }
+        else if (isInside(mouseX, mouseY, 1020, 755, 75, 35)) {
+            if (!running) {
+                cpu.step();
+                renderer.resetAnimation();
+            }
+        }
+        else if (isInside(mouseX, mouseY, 1110, 755, 85, 35)) {
+            cpu.reset();
+            cpu.loadDefaultProgram();
+            renderer.resetAnimation();
+            running = false;
+        }
+
+        InvalidateRect(hwnd, NULL, FALSE);
+        return 0;
+    }
 
     case WM_KEYDOWN:
         if (wParam == 'R') {
@@ -43,7 +74,37 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     case WM_PAINT: {
         PAINTSTRUCT paintStruct;
         HDC hdc = BeginPaint(hwnd, &paintStruct);
-        renderer.drawAll(hdc, running);
+
+        RECT clientRect;
+        GetClientRect(hwnd, &clientRect);
+
+        HDC memoryDC = CreateCompatibleDC(hdc);
+        HBITMAP memoryBitmap = CreateCompatibleBitmap(
+            hdc,
+            clientRect.right - clientRect.left,
+            clientRect.bottom - clientRect.top
+        );
+
+        HBITMAP oldBitmap = (HBITMAP)SelectObject(memoryDC, memoryBitmap);
+
+        renderer.drawAll(memoryDC, running);
+
+        BitBlt(
+            hdc,
+            0,
+            0,
+            clientRect.right - clientRect.left,
+            clientRect.bottom - clientRect.top,
+            memoryDC,
+            0,
+            0,
+            SRCCOPY
+        );
+
+        SelectObject(memoryDC, oldBitmap);
+        DeleteObject(memoryBitmap);
+        DeleteDC(memoryDC);
+
         EndPaint(hwnd, &paintStruct);
         return 0;
     }
