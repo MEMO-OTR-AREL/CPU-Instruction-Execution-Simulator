@@ -60,6 +60,10 @@ The visual buttons on the simulator screen can also be used:
 - Windows API
 - GDI Drawing
 
+## Screenshot
+
+![CPU Simulator Screenshot](screenshot.png)
+
 ## Project Structure
 
 ```text
