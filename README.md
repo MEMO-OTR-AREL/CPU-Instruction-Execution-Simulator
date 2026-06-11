@@ -6,7 +6,7 @@ The simulator demonstrates how a simplified CPU executes instructions step by st
 
 ## Project Purpose
 
-The purpose of this project is to visually simulate the basic working logic of a CPU.  
+The purpose of this project is to visually simulate the basic working logic of a CPU.
 It shows how instructions are loaded from memory, decoded by the control unit, processed by the ALU, and written back to registers or memory.
 
 ## Main Components
@@ -47,6 +47,12 @@ It shows how instructions are loaded from memory, decoded by the control unit, p
 | Backspace | Reset CPU |
 | Esc | Exit program |
 
+The visual buttons on the simulator screen can also be used:
+
+- RUN
+- STEP
+- RESET
+
 ## Technologies Used
 
 - C++
@@ -58,12 +64,17 @@ It shows how instructions are loaded from memory, decoded by the control unit, p
 
 ```text
 CPUProject
-├── Kaynak.cpp
-├── Instruction.h
-├── Memory.h
-├── RegisterFile.h
-├── ALU.h
-├── ControlUnit.h
-├── CPU.h
-├── Renderer.h
-└── README.md
+|-- Kaynak.cpp
+|-- Instruction.h
+|-- Memory.h
+|-- RegisterFile.h
+|-- ALU.h
+|-- ControlUnit.h
+|-- CPU.h
+|-- Renderer.h
+|-- README.md
+```
+
+## Author
+
+Mehmet Ali Oter
