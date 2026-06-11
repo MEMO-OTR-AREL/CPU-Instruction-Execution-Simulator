@@ -47,6 +47,7 @@ public:
         phase = 0;
         ir = { "NONE", 0, 0, "NONE" };
         registerFile.reset();
+        memory.resetData();
         logs.clear();
 
         addLog("CPU reset completed.");

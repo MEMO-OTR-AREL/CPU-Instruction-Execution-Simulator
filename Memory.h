@@ -38,6 +38,12 @@ public:
         }
     }
 
+    void resetData() {
+        for (int& value : dataMemory) {
+            value = 0;
+        }
+    }
+
     const std::vector<Instruction>& getInstructions() const {
         return instructionMemory;
     }
